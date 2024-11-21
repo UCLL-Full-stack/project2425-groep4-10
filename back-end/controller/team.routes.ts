@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import teamService from '../service/team.service';
+import { TeamInput } from '../types';
 
 const teamRouter = express.Router();
 
@@ -84,7 +85,7 @@ teamRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
  */
 teamRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const team = req.body;
+        const team = <TeamInput>req.body;
         const newTeam = await teamService.createTeam(team);
         res.status(201).json(newTeam);
     } catch (error) {

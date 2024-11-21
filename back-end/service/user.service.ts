@@ -1,6 +1,7 @@
 import userDB from '../domain/data-access/user.db'
 import { User } from '../domain/model/user'
 import bcrypt from 'bcrypt'
+import { UserInput } from '../types'
 
 
 const getAllUsers = async (): Promise<User[]> => {
