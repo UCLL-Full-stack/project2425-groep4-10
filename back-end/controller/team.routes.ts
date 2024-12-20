@@ -1,58 +1,72 @@
 /**
  * @swagger
- *   components:
- *    securitySchemes:
- *     bearerAuth:
- *      type: http
- *      scheme: bearer
- *      bearerFormat: JWT
- *    schemas:
- *      User:
- *          type: object
- *          properties:
- *            id:
- *              type: number
- *              format: int64
- *            username:
- *              type: string
- *            firstName:
- *              type: string
- *            lastName:
- *              type: string
- *            email:
- *              type: string
-  *      Coach:
- *          type: object
- *          properties:
- *            id:
- *              type: number
- *              format: int64
- *            user:
- *              $ref: '#/components/schemas/User'
- *      Player:
- *          type: object
- *          properties:
- *            id:
- *              type: number
- *              format: int64
- *            user:
- *              $ref: '#/components/schemas/User'
- *      Team:
- *          type: object
- *          properties:
- *            id:
- *              type: number
- *              format: int64
- *            teamName:
- *              type: string
- *            location:
- *              type: string
- *            coach:
- *              $ref: '#/components/schemas/Coach'
- *            players:
- *              type: array
- *              items:
- *                $ref: '#/components/schemas/Player'
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: number
+ *           format: int64
+ *         username:
+ *           type: string
+ *         firstName:
+ *           type: string
+ *         lastName:
+ *           type: string
+ *         email:
+ *           type: string
+ *     Coach:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: number
+ *           format: int64
+ *         user:
+ *           $ref: '#/components/schemas/User'
+ *     Player:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: number
+ *           format: int64
+ *         user:
+ *           $ref: '#/components/schemas/User'
+ *     Team:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: number
+ *           format: int64
+ *         teamName:
+ *           type: string
+ *         location:
+ *           type: string
+ *         coach:
+ *           $ref: '#/components/schemas/Coach'
+ *         players:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/Player'
+ *     TeamInput:
+ *       type: object
+ *       properties:
+ *         teamName:
+ *           type: string
+ *         location:
+ *           type: string
+ *         coach:
+ *           type: object
+ *           properties:
+ *             id:
+ *               type: integer
+ *         players:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: integer
  */
 
 import express, { NextFunction, Request, Response } from 'express';
@@ -235,6 +249,47 @@ teamRouter.delete('/:id/player', async (req: Request, res: Response, next: NextF
         const { playerId } = req.body;
         const player = await teamService.leaveTeam({ teamId, playerId });
         res.status(200).json(player);
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /teams/{id}:
+ *   put:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Update an existing team
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The team ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/TeamInput'
+ *     responses:
+ *       200:
+ *         description: Team updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Team'
+ *       404:
+ *         description: Team not found
+ */
+teamRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params;
+        const { teamName, location } = req.body;
+        const updatedTeam = await teamService.updateTeam({ id: parseInt(id), teamName, location });
+        res.status(200).json(updatedTeam);
     } catch (error) {
         next(error);
     }

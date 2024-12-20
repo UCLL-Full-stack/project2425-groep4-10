@@ -101,6 +101,49 @@ matchRouter.get('/', async (req: Request, res: Response, next: NextFunction) => 
     }
 });
 
+/** 
+ * @swagger
+ * /matches:
+ *   post:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Create a new match
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               teamIds:
+ *                 type: array
+ *                 items:
+ *                   type: integer
+ *               dateTime:
+ *                 type: string
+ *                 format: date-time
+ *               location:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Match created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Match'
+ *       400:
+ *         description: Bad request
+ */
+matchRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { teamIds, dateTime, location } = req.body;
+        const match = await matchService.createMatch({ teamIds, dateTime, location });
+        res.status(201).json(match);
+    } catch (error) {
+        next(error);
+    }
+});
+
 /**
  * @swagger
  * /matches/{id}:

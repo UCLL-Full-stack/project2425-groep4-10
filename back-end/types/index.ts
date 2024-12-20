@@ -35,7 +35,7 @@ type TeamInput = {
     teamName: string;
     location: string;
     coach: CoachInput;
-    players: PlayerInput[];
+    players?: PlayerInput[];
 }
 
 type MatchInput = {

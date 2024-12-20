@@ -19,6 +19,7 @@ const main = async () => {
             firstName: 'Admin',
             lastName: 'Istrator',
             email: 'admin.istrator@brax.be',
+            role: 'admin'
         }
     },
     )
@@ -32,6 +33,7 @@ const main = async () => {
                     firstName: 'Jeroen',
                     lastName: 'R',
                     email: 'jeroen.r@ucll.be',
+                    role: 'player'
                 }
             },
             position: 'defender',
@@ -48,6 +50,7 @@ const main = async () => {
                     firstName: 'Greetje',
                     lastName: 'Jongen',
                     email: 'greetje.jongen@ucll.be',
+                    role: 'player'
                 }
             },
             position: 'midfielder',
@@ -64,6 +67,7 @@ const main = async () => {
                     firstName: 'Johan',
                     lastName: 'Pieck',
                     email: 'johan.pieck@ucll.be',
+                    role: 'coach'
                 }
             },
             rating: 5,
@@ -80,6 +84,7 @@ const main = async () => {
                     firstName: 'Rudi',
                     lastName: 'Swennen',
                     email: 'rudi.swennen@ucll.be',
+                    role: 'player'
                 }
             },
             position: 'goalkeeper',
@@ -97,6 +102,7 @@ const main = async () => {
                     firstName: 'Pieter',
                     lastName: 'Geens',
                     email: 'pieter.geens@ucll.be',
+                    role: 'player'
                 }
             },
             position: 'midfielder',
@@ -113,9 +119,27 @@ const main = async () => {
                     firstName: 'Tiebe',
                     lastName: 'Van Nieuwenhove',
                     email: 'tiebe.vannieuwenhove@ucll.be',
+                    role: 'coach'
                 }
             },
             rating: 4,
+            experience: 5
+        }
+    })
+
+    const rafika = await prisma.coach.create({
+        data: {
+            user: {
+                create: {
+                    username: 'rafika',
+                    password: await bcrypt.hash('rafika123', 12),
+                    firstName: 'Rafik',
+                    lastName: 'Anamse',
+                    email: 'rafik.anamse@ucll.be',
+                    role: 'coach'
+                }
+            },
+            rating: 5,
             experience: 5
         }
     })

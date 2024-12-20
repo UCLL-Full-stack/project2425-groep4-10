@@ -54,12 +54,12 @@ const getMatchById = async ({ id }: { id: number }): Promise<Match | null> => {
     }
 }
 
-const createMatch = async ({ teams, dateTime, location }: Match): Promise<Match> => {
+const createMatch = async ({ teamIds, dateTime, location }: { teamIds: number[], dateTime: Date, location: string }): Promise<Match> => {
     try {
         const matchPrisma = await database.match.create({
             data: {
                 teams: {
-                    connect: teams.map((team) => ({ id: team.id })),
+                    connect: teamIds.map((id) => ({ id })),
                 },
                 dateTime: dateTime,
                 location: location

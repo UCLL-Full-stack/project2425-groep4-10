@@ -31,35 +31,37 @@ const getTeamById = async ({ id }: { id: number }): Promise<Team | null> => {
     }
 }
 
-const createTeam = async ({ coach, teamName, location }: Team): Promise<Team> => {
+const createTeam = async ({ teamName, location, coach, players }: Team): Promise<Team> => {
     try {
+        console.log('Creating team:', { teamName, location, coach, players });
+
         const teamPrisma = await database.team.create({
             data: {
-                coach: {
-                    connect: { id: coach.id },
-                },
                 teamName: teamName,
                 location: location,
+                coach: { connect: { id: coach.id } },
+                players: players && players.length > 0 ? { connect: players.map(player => ({ id: player.id })) } : undefined,
             },
             include: {
                 coach: { include: { user: true } },
                 players: { include: { user: true } },
             },
-        })
-        return Team.from(teamPrisma)
-    } catch (error) {
-        throw new Error('Database error. See server log for details.')
-    }
-}
+        });
 
-const updateTeam = async ({ id, coach, teamName, location }: Team): Promise<Team> => {
+        console.log('Team created successfully:', teamPrisma);
+        return Team.from(teamPrisma);
+    } catch (error) {
+        console.error('Error creating team:', error);
+        throw new Error(`Database error. See server log for details. Error: ${error.message}`);
+    }
+};
+
+
+const updateTeam = async ({ id, teamName, location }: { id: number, teamName: string, location: string }): Promise<Team> => {
     try {
         const teamPrisma = await database.team.update({
             where: { id },
             data: {
-                coach: {
-                    connect: { id: coach.id },
-                },
                 teamName: teamName,
                 location: location,
             },
@@ -67,12 +69,13 @@ const updateTeam = async ({ id, coach, teamName, location }: Team): Promise<Team
                 coach: { include: { user: true } },
                 players: { include: { user: true } },
             },
-        })
-        return Team.from(teamPrisma)
+        });
+        return Team.from(teamPrisma);
     } catch (error) {
-        throw new Error('Database error. See server log for details.')
+        console.error('Error updating team:', error);
+        throw new Error(`Database error. See server log for details. Error: ${error.message}`);
     }
-}
+};
 
 const joinTeam = async ({ playerId, teamId }: { playerId: number, teamId: number }): Promise<Team> => {
     try {
@@ -137,4 +140,5 @@ export default {
     joinTeam,
     leaveTeam,
     getTeamByName,
+
 }

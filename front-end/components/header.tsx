@@ -1,29 +1,89 @@
-import Link from "next/link";
-import styles from "../styles/Header.module.css";
+import { User } from "../types"
+import { useTranslation } from "next-i18next"
+import Link from "next/link"
+import { useEffect, useState } from "react"
+import Language from "./language/Language"
 
 const Header: React.FC = () => {
+    const [loggedInUser, setLoggedInUser] = useState<User>(null)
+
+    const { t } = useTranslation()
+
+    useEffect(() => {
+        setLoggedInUser(JSON.parse(sessionStorage.getItem("user")))
+    }, [])
+
+    const handleClick = () => {
+        sessionStorage.removeItem("user")
+        setLoggedInUser(null)
+    }
+
     return (
-        <header className={styles.header}>
-            <a className={styles.title}>
-                Football manager
+        <header className="p-3 mb-3 border-bottom bg-gradient-to-br from-gray-900 to-gray-600 flex flex-col items-center">
+            <a className="flex  mb-2 md:mb-5 text-white-50 text-3xl text-gray-300">
+                {t("app.title")}
             </a>
-            <nav className={styles.nav}>
-                <Link href="/" className={styles.navLink}>
-                    Home
-                </Link>
-                <Link href="/teams" className={styles.navLink}>
-                    Teams
-                </Link>
-                <Link href="/coaches" className={styles.navLink}>
-                    Coaches
-                </Link>
-                <Link href="/players" className={styles.navLink}>
-                    Players
-                </Link>
+            <nav className="items-center flex md:flex-row flex-col">
+                <ul className="flex flex-row space-x-4">
+                    <li>
+                        <Link
+                            href="/matches"
+                            className=" px-4 text-xl text-white  hover:bg-gray-600 rounded-lg"
+                        >
+                            {t("header.nav.home")}
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            href="/teams"
+                            className="px-4  text-white text-xl hover:bg-gray-600 rounded-lg"
+                        >
+                            {t("header.nav.teams")}
+                        </Link>
+                    </li>
+                    <li>
+                        {loggedInUser && loggedInUser.role === "coach" &&
+                            <Link
+                                href="/coaches"
+                                className="px-4  text-white text-xl hover:bg-gray-600 rounded-lg"
+                            >
+                                {t("header.nav.coaches")}
+                            </Link>
+                        }
+                    </li>
+                    <li>
+                        {!loggedInUser && (
+                            <Link
+                                href="/login"
+                                className="px-4  text-white text-xl hover:bg-gray-600 rounded-lg"
+                            >
+                                {t("header.nav.login")}
+                            </Link>
+                        )}
+                    </li>
+                    <li>
+                        {loggedInUser && (
+                            <a
+                                href="/login"
+                                onClick={handleClick}
+                                className="px-4  text-white text-xl hover:bg-gray-600 rounded-lg"
+                            >
+                                {t("header.nav.logout")}
+                            </a>
+                        )}
+                    </li>
+                    {loggedInUser && (
+                        <div className="text-white ms-5 mt-2 md:mt-0 pt-1 md:pt-0 grow">
+                            {t("header.welcome")}, {loggedInUser.fullname}!
+                        </div>
+                    )}
+                    <li>
+                        <Language />
+                    </li>
+                </ul>
             </nav>
         </header>
-    );
+    )
 }
 
-export default Header;
-
+export default Header
