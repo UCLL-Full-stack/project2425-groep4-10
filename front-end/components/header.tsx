@@ -27,10 +27,19 @@ const Header: React.FC = () => {
                 <ul className="flex flex-row space-x-4">
                     <li>
                         <Link
-                            href="/matches"
+                            href="/"
                             className=" px-4 text-xl text-white  hover:bg-gray-600 rounded-lg"
                         >
                             {t("header.nav.home")}
+
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            href="/matches"
+                            className=" px-4 text-xl text-white  hover:bg-gray-600 rounded-lg"
+                        >
+                            {t("header.nav.matches")}
                         </Link>
                     </li>
                     <li>
@@ -42,14 +51,14 @@ const Header: React.FC = () => {
                         </Link>
                     </li>
                     <li>
-                        {loggedInUser && loggedInUser.role === "coach" &&
+                        {loggedInUser && (loggedInUser.role === "coach" || loggedInUser.role === "admin") && (
                             <Link
-                                href="/coaches"
+                                href="/players"
                                 className="px-4  text-white text-xl hover:bg-gray-600 rounded-lg"
                             >
-                                {t("header.nav.coaches")}
+                                {t("header.nav.players")}
                             </Link>
-                        }
+                        )}
                     </li>
                     <li>
                         {!loggedInUser && (
@@ -82,7 +91,7 @@ const Header: React.FC = () => {
                     </li>
                 </ul>
             </nav>
-        </header>
+        </header >
     )
 }
 

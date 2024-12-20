@@ -5,8 +5,10 @@
         "welcome": "Bienvenido",
         "nav": {
             "home": "Inicio",
+            "matches": "Partidos",
             "teams": "Grupos",
             "coaches": "Entrenadores",
+            "players": "Jugadores",
             "login": "Conéctese",
             "logout": "Cerrar sesión"
         }
@@ -22,10 +24,11 @@
         "label": {
             "username": "Nombre de usuario:",
             "password": "Contraseña:"
-        }
+        },
+        "users": "Usuarios predefinidos:"
     },
     "home": {
         "title": "Bienvenido!",
-        "description": "Cursos le permite ver como profesor todos los cursos que está impartiendo y como alumno todos los cursos en los que está matriculado. También puede ver cuándo están programados los cursos y los alumnos matriculados en cada curso."
+        "description": "Esta es la página de inicio de la aplicación de coincidencia. Puede navegar a través de las diferentes secciones utilizando la barra de navegación en la parte superior."
     }
 }

@@ -6,15 +6,15 @@ import { useTranslation } from 'next-i18next';
 import Header from '@/components/header';
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
-
 const TeamsPage: React.FC = () => {
     const [teams, setTeams] = useState<Array<Team>>([]);
-    const [loggedInUser, setLoggedInUser] = useState<{ role: string }>({ role: '' });
+    const [loggedInUser, setLoggedInUser] = useState<{ role: string } | null>(null);  // Initialize as null
     const { t } = useTranslation();
 
     useEffect(() => {
-        const user = JSON.parse(sessionStorage.getItem('user') || '{}');
-        setLoggedInUser(user);
+        // Get user from sessionStorage
+        const user = JSON.parse(sessionStorage.getItem('user') || 'null');
+        setLoggedInUser(user);  // Set loggedInUser to null if no user in session
     }, []);
 
     const getTeams = async () => {
@@ -70,14 +70,22 @@ const TeamsPage: React.FC = () => {
         <div>
             <Header />
             <h1>Teams</h1>
-            <TeamOverview
-                teams={teams}
-                onRemovePlayer={handleRemovePlayer}
-                onAddTeam={handleAddTeam}
-                onEditTeam={handleEditTeam}
-                onAddPlayer={handleAddPlayer}
-                loggedInUser={loggedInUser}
-            />
+
+            {/* Only render TeamOverview if the user is logged in */}
+            {loggedInUser ? (
+                <TeamOverview
+                    teams={teams}
+                    onRemovePlayer={handleRemovePlayer}
+                    onAddTeam={handleAddTeam}
+                    onEditTeam={handleEditTeam}
+                    onAddPlayer={handleAddPlayer}
+                    loggedInUser={loggedInUser}
+                />
+            ) : (
+                <div className="p-8 bg-gray-100 text-center">
+                    <h2 className="text-2xl font-semibold">Please log in to view teams</h2>
+                </div>
+            )}
         </div>
     );
 };

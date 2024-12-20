@@ -144,6 +144,41 @@ const main = async () => {
         }
     })
 
+    const alice = await prisma.coach.create({
+        data: {
+            user: {
+                create: {
+                    username: 'alicej',
+                    password: await bcrypt.hash('password123', 12),
+                    firstName: 'Alice',
+                    lastName: 'Johnson',
+                    email: 'alice.johnson@example.com',
+                    role: 'coach'
+                }
+            },
+            rating: 4,
+            experience: 3
+        }
+    });
+
+    const bob = await prisma.coach.create({
+        data: {
+            user: {
+                create: {
+                    username: 'bobw',
+                    password: await bcrypt.hash('password123', 12),
+                    firstName: 'Bob',
+                    lastName: 'Williams',
+                    email: 'bob.williams@example.com',
+                    role: 'coach'
+                }
+            },
+            rating: 4,
+            experience: 4
+        }
+    })
+
+
     const UCLL = await prisma.team.create({
         data: {
             teamName: "UCLL",

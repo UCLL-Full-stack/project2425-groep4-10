@@ -4,9 +4,11 @@
     "header": {
         "welcome": "Welcome",
         "nav": {
-            "home": "Matches",
+            "home": "Home",
+            "matches": "Matches",
             "teams": "Teams",
             "coaches": "Coaches",
+            "players": "Players",
             "login": "Login",
             "logout": "Logout"
         }
@@ -22,10 +24,11 @@
         "label": {
             "username": "Username:",
             "password": "Password:"
-        }
+        },
+        "users": "Predefined users:"
     },
     "home": {
         "title": "Welcome!",
-        "description": "Courses lets you see as a lecturer all the courses you are teaching and as a student all the courses you are enrolled in. You can also see when the courses are scheduled and the students enrolled in each course."
+        "description": "Match App allows you to view all the matches, teams, coaches, and players. You can also view the details of each match, teamand player."
     }
 }

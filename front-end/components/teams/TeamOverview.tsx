@@ -87,31 +87,29 @@ const TeamOverview: React.FC<Props> = ({
     };
 
     return (
-        <div className="p-4 bg-gray-100">
-            {/* Admin Actions */}
+        <div className="p-6 bg-gray-100 space-y-6">
             {loggedInUser.role === "admin" && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    {/* Add New Team Section */}
-                    <div className="p-4 bg-white border rounded shadow">
-                        <h2 className="text-lg font-bold mb-4">Add New Team</h2>
+                <div className="p-6 bg-white border rounded-lg shadow-md">
+                    <h2 className="text-2xl font-semibold mb-4">Add New Team</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <input
                             type="text"
                             placeholder="Team Name"
                             value={newTeamName}
                             onChange={(e) => setNewTeamName(e.target.value)}
-                            className="mb-2 p-2 border rounded w-full"
+                            className="p-3 border rounded w-full"
                         />
                         <input
                             type="text"
                             placeholder="Location"
                             value={newLocation}
                             onChange={(e) => setNewLocation(e.target.value)}
-                            className="mb-2 p-2 border rounded w-full"
+                            className="p-3 border rounded w-full"
                         />
                         <select
                             value={newCoachId ?? ""}
                             onChange={(e) => setNewCoachId(Number(e.target.value))}
-                            className="mb-2 p-2 border rounded w-full"
+                            className="p-3 border rounded w-full"
                         >
                             <option value="" disabled>
                                 Select Coach
@@ -122,49 +120,44 @@ const TeamOverview: React.FC<Props> = ({
                                 </option>
                             ))}
                         </select>
-                        <button
-                            onClick={handleAddTeam}
-                            className="p-2 bg-blue-500 text-white rounded w-full"
-                        >
-                            Add Team
-                        </button>
                     </div>
+                    <button
+                        onClick={handleAddTeam}
+                        className="mt-4 p-3 bg-blue-600 text-white rounded w-full hover:bg-blue-700"
+                    >
+                        Add Team
+                    </button>
                 </div>
             )}
 
-            {/* Teams Section */}
-            <div className="p-4 bg-white border rounded shadow">
-                <h2 className="text-lg font-bold mb-4">Teams</h2>
-                <table className="w-full bg-white border">
-                    <thead className="bg-gray-200 text-gray-600 uppercase text-sm">
-                        <tr>
-                            <th className="py-2 px-4 text-left">Team Name</th>
-                            <th className="py-2 px-4 text-left">Coach</th>
-                            <th className="py-2 px-4 text-left">Location</th>
-                            <th className="py-2 px-4 text-left">Players</th>
-                            <th className="py-2 px-4 text-left">Actions</th>
+            <div className="p-6 bg-white border rounded-lg shadow-md">
+                <h2 className="text-2xl font-semibold mb-4">Teams</h2>
+                <table className="w-full table-auto border-collapse">
+                    <thead>
+                        <tr className="bg-gray-200 text-left text-sm text-gray-600 uppercase">
+                            <th className="py-3 px-4">Team Name</th>
+                            <th className="py-3 px-4">Coach</th>
+                            <th className="py-3 px-4">Location</th>
+                            <th className="py-3 px-4">Players</th>
+                            <th className="py-3 px-4">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {teams.map((team) => (
                             <React.Fragment key={team.id}>
-                                <tr
-                                    className={`hover:bg-gray-100 ${selectedTeamId === team.id ? "bg-gray-50" : ""
-                                        }`}
-                                    onClick={() => setSelectedTeamId(selectedTeamId === team.id ? null : team.id)}
-                                >
-                                    <td className="py-2 px-4">{team.teamName}</td>
-                                    <td className="py-2 px-4">{team.coach.user.username}</td>
-                                    <td className="py-2 px-4">{team.location}</td>
-                                    <td className="py-2 px-4">
+                                <tr className={`hover:bg-gray-100 ${selectedTeamId === team.id ? "bg-gray-50" : ""}`}>
+                                    <td className="py-3 px-4">{team.teamName}</td>
+                                    <td className="py-3 px-4">{team.coach.user.username}</td>
+                                    <td className="py-3 px-4">{team.location}</td>
+                                    <td className="py-3 px-4">
                                         {team.players.length > 0
                                             ? `${team.players.length} Players`
                                             : "No Players"}
                                     </td>
-                                    <td className="py-2 px-4">
+                                    <td className="py-3 px-4">
                                         {loggedInUser.role === "admin" && (
                                             <button
-                                                className="text-blue-500"
+                                                className="text-blue-600 hover:underline"
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     setEditTeamName(team.teamName);
@@ -179,59 +172,71 @@ const TeamOverview: React.FC<Props> = ({
                                 </tr>
                                 {selectedTeamId === team.id && (
                                     <tr>
-                                        <td colSpan={5} className="p-4 bg-gray-50">
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                {/* Edit Team */}
+                                        <td colSpan={5} className="bg-gray-50 p-6">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                 <div>
-                                                    <h3 className="text-lg font-bold mb-2">Edit Team</h3>
+                                                    <h3 className="text-lg font-semibold mb-4">Edit Team</h3>
                                                     <input
                                                         type="text"
                                                         value={editTeamName}
                                                         onChange={(e) => setEditTeamName(e.target.value)}
-                                                        className="mb-2 p-2 border rounded w-full"
+                                                        className="mb-4 p-3 border rounded w-full"
                                                         placeholder="Team Name"
                                                     />
                                                     <input
                                                         type="text"
                                                         value={editLocation}
                                                         onChange={(e) => setEditLocation(e.target.value)}
-                                                        className="mb-2 p-2 border rounded w-full"
+                                                        className="mb-4 p-3 border rounded w-full"
                                                         placeholder="Location"
                                                     />
                                                     <button
                                                         onClick={handleEditTeam}
-                                                        className="p-2 bg-green-500 text-white rounded w-full"
+                                                        className="p-3 bg-green-600 text-white rounded w-full hover:bg-green-700"
                                                     >
                                                         Save Changes
                                                     </button>
                                                 </div>
-
-                                                {/* Player Management */}
                                                 <div>
-                                                    <h3 className="text-lg font-bold mb-2">Players in Team</h3>
+                                                    <h3 className="text-lg font-semibold mb-4">Add Players</h3>
+                                                    <select
+                                                        onChange={(e) =>
+                                                            handleAddPlayer(team.id, Number(e.target.value))
+                                                        }
+                                                        className="mb-4 p-3 border rounded w-full"
+                                                    >
+                                                        <option value="">Select Player</option>
+                                                        {players.map((player) => (
+                                                            <option key={player.id} value={player.id}>
+                                                                {player.user.username}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                    <h3 className="text-lg font-semibold mb-4">Players in Team</h3>
                                                     {team.players.length > 0 ? (
                                                         <table className="w-full border">
-                                                            <thead className="bg-gray-200 text-gray-600 uppercase text-sm">
-                                                                <tr>
-                                                                    <th className="py-2 px-4">Player Name</th>
-                                                                    <th className="py-2 px-4">Actions</th>
+                                                            <thead>
+                                                                <tr className="bg-gray-200 text-left text-sm text-gray-600 uppercase">
+                                                                    <th className="py-3 px-4">Player Name</th>
+                                                                    <th className="py-3 px-4">Actions</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
                                                                 {team.players.map((player) => (
-                                                                    <tr key={player.id} className="border-b">
-                                                                        <td className="py-2 px-4">{player.user.username}</td>
-                                                                        <td className="py-2 px-4">
-                                                                            {loggedInUser.role === "admin" && (
-                                                                                <button
-                                                                                    onClick={() =>
-                                                                                        handlePlayerDelete(team.id, player.id)
-                                                                                    }
-                                                                                    className="text-red-500"
-                                                                                >
-                                                                                    Remove
-                                                                                </button>
-                                                                            )}
+                                                                    <tr key={player.id}>
+                                                                        <td className="py-3 px-4">{player.user.username}</td>
+                                                                        <td className="py-3 px-4">
+                                                                            <button
+                                                                                className="text-red-600 hover:underline"
+                                                                                onClick={() =>
+                                                                                    handlePlayerDelete(
+                                                                                        team.id,
+                                                                                        player.id
+                                                                                    )
+                                                                                }
+                                                                            >
+                                                                                Remove
+                                                                            </button>
                                                                         </td>
                                                                     </tr>
                                                                 ))}
@@ -240,37 +245,11 @@ const TeamOverview: React.FC<Props> = ({
                                                     ) : (
                                                         <p className="text-gray-500">No players in this team.</p>
                                                     )}
-
-                                                    <h3 className="text-lg font-bold mt-4 mb-2">Add Players</h3>
-                                                    <table className="w-full border">
-                                                        <thead className="bg-gray-200 text-gray-600 uppercase text-sm">
-                                                            <tr>
-                                                                <th className="py-2 px-4">Player Name</th>
-                                                                <th className="py-2 px-4">Actions</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {players.map((player) => (
-                                                                <tr key={player.id} className="border-b">
-                                                                    <td className="py-2 px-4">{player.user.username}</td>
-                                                                    <td className="py-2 px-4">
-                                                                        <button
-                                                                            onClick={() => handleAddPlayer(team.id, player.id)}
-                                                                            className="text-blue-500"
-                                                                        >
-                                                                            Add
-                                                                        </button>
-                                                                    </td>
-                                                                </tr>
-                                                            ))}
-                                                        </tbody>
-                                                    </table>
                                                 </div>
                                             </div>
                                         </td>
                                     </tr>
                                 )}
-
                             </React.Fragment>
                         ))}
                     </tbody>
