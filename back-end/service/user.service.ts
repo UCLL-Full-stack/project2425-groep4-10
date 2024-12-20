@@ -1,27 +1,42 @@
-import userDB from '../domain/data-access/user.db'
-import { User } from '../domain/model/user'
 import bcrypt from 'bcrypt'
-import { UserInput } from '../types'
+import { User } from '../domain/model/user'
+import userDB from '../domain/data-access/user.db'
+import { AuthenticationResponse, UserInput } from '../types'
+import { generateJwtToken } from '../util/jwt'
 
+const getAllUsers = async (): Promise<User[]> => userDB.getAllUsers()
 
-const getAllUsers = async (): Promise<User[]> => {
-    return userDB.getAllUsers()
+const getUserByUsername = async ({ username }: { username: string }): Promise<User> => {
+    const user = await userDB.getUserByUsername({ username })
+    if (!user) {
+        throw new Error(`User with username: ${username} does not exist.`)
+    }
+    return user
 }
 
-const getUserById = async ({ id }: { id: number }): Promise<User | null> => {
-    return userDB.getUserById({ id })
-}
+const authenticate = async ({ username, password }: UserInput): Promise<AuthenticationResponse> => {
+    const user = await getUserByUsername({ username })
 
-const getUserByUsername = async ({ username }: { username: string }): Promise<User | null> => {
-    return userDB.getUserByUsername({ username })
-}
+    const isValidPassword = await bcrypt.compare(password, user.password)
+
+    if (!isValidPassword) {
+        throw new Error('Incorrect password.')
+    }
+    return {
+        token: generateJwtToken({ username, role: user.role }),
+        username: username,
+        fullname: `${user.firstName} ${user.lastName}`,
+        role: user.role,
+    };
+};
 
 const createUser = async ({
     username,
+    password,
     firstName,
     lastName,
     email,
-    password,
+    role,
 }: UserInput): Promise<User> => {
     const existingUser = await userDB.getUserByUsername({ username })
 
@@ -30,14 +45,14 @@ const createUser = async ({
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
-    const user = new User({ username, password: hashedPassword, firstName, lastName, email })
+    const user = new User({ username, password: hashedPassword, firstName, lastName, email, role })
 
-    return await userDB.createUser({ user })
+    return await userDB.createUser(user)
 };
 
 export default {
-    getAllUsers,
-    getUserById,
+    getUserByUsername,
+    authenticate,
     createUser,
-    getUserByUsername
+    getAllUsers
 }

@@ -1,4 +1,5 @@
 import { User as UserPrisma } from '@prisma/client'
+import { Role } from '../../types'
 
 export class User {
     readonly id?: number;
@@ -7,6 +8,8 @@ export class User {
     readonly lastName: string;
     readonly email: string;
     readonly password: string;
+    readonly role: Role
+
 
     constructor(user: {
         id?: number,
@@ -15,6 +18,7 @@ export class User {
         lastName: string,
         email: string,
         password: string
+        role: Role
     }) {
         this.validate(user);
 
@@ -24,17 +28,20 @@ export class User {
         this.lastName = user.lastName;
         this.email = user.email;
         this.password = user.password;
+        this.role = user.role;
 
     }
 
-    equals({ id, username, firstName, lastName, email, password }: User): boolean {
+    equals({ id, username, firstName, lastName, email, password, role }: User): boolean {
         return (
             this.id === id &&
             this.username === username &&
             this.firstName === firstName &&
             this.lastName === lastName &&
             this.email === email &&
-            this.password === password
+            this.password === password &&
+            this.role === role
+
         );
     }
 
@@ -43,7 +50,8 @@ export class User {
         firstName: string,
         lastName: string,
         email: string,
-        password: string
+        password: string,
+        role: Role
     }) {
         if (!user.username) {
             throw new Error('User must have a username');
@@ -60,10 +68,15 @@ export class User {
         if (!user.password) {
             throw new Error('User must have a password');
         }
+        if (!user.role) {
+            throw new Error('User must have a role');
+        }
 
     }
 
-    static from({ id, username, firstName, lastName, email, password }: UserPrisma): User {
-        return new User({ id, username, firstName, lastName, email, password });
+    static from({ id, username, firstName, lastName, email, password, role }: UserPrisma): User {
+        return new User({
+            id, username, firstName, lastName, email, password, role: role as Role,
+        });
     }
 }

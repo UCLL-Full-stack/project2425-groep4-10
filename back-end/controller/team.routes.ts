@@ -1,3 +1,60 @@
+/**
+ * @swagger
+ *   components:
+ *    securitySchemes:
+ *     bearerAuth:
+ *      type: http
+ *      scheme: bearer
+ *      bearerFormat: JWT
+ *    schemas:
+ *      User:
+ *          type: object
+ *          properties:
+ *            id:
+ *              type: number
+ *              format: int64
+ *            username:
+ *              type: string
+ *            firstName:
+ *              type: string
+ *            lastName:
+ *              type: string
+ *            email:
+ *              type: string
+  *      Coach:
+ *          type: object
+ *          properties:
+ *            id:
+ *              type: number
+ *              format: int64
+ *            user:
+ *              $ref: '#/components/schemas/User'
+ *      Player:
+ *          type: object
+ *          properties:
+ *            id:
+ *              type: number
+ *              format: int64
+ *            user:
+ *              $ref: '#/components/schemas/User'
+ *      Team:
+ *          type: object
+ *          properties:
+ *            id:
+ *              type: number
+ *              format: int64
+ *            teamName:
+ *              type: string
+ *            location:
+ *              type: string
+ *            coach:
+ *              $ref: '#/components/schemas/Coach'
+ *            players:
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/Player'
+ */
+
 import express, { NextFunction, Request, Response } from 'express';
 import teamService from '../service/team.service';
 import { TeamInput } from '../types';
@@ -8,6 +65,8 @@ const teamRouter = express.Router();
  * @swagger
  * /teams:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Retrieve a list of teams
  *     responses:
  *       200:
@@ -32,6 +91,8 @@ teamRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  * @swagger
  * /teams/{id}:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Retrieve a team by ID
  *     parameters:
  *       - in: path
@@ -68,6 +129,8 @@ teamRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
  * @swagger
  * /teams:
  *   post:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Create a new team
  *     requestBody:
  *       required: true
@@ -97,6 +160,8 @@ teamRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
  * @swagger
  * /teams/{id}/player:
  *   post:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Add a player to a team
  *     parameters:
  *       - in: path
@@ -137,6 +202,8 @@ teamRouter.post('/:id/player', async (req: Request, res: Response, next: NextFun
  * @swagger
  * /teams/{id}/player:
  *   delete:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Remove a player from a team
  *     parameters:
  *       - in: path
@@ -173,91 +240,5 @@ teamRouter.delete('/:id/player', async (req: Request, res: Response, next: NextF
     }
 });
 
-/**
- * @swagger
- * components:
- *   schemas:
- *     Team:
- *       type: object
- *       properties:
- *         id:
- *           type: integer
- *         teamName:
- *           type: string
- *         location:
- *           type: string
- *         coach:
- *           type: object
- *           properties:
- *             id:
- *               type: integer
- *             user:
- *               type: object
- *               properties:
- *                 username:
- *                   type: string
- *                 firstName:
- *                   type: string
- *                 lastName:
- *                   type: string
- *                 email:
- *                   type: string
- *                   format: email
- *                 password:
- *                   type: string
- *         players:
- *           type: array
- *           items:
- *             type: object
- *             properties:
- *               id:
- *                 type: integer
- *               user:
- *                 type: object
- *                 properties:
- *                   username:
- *                     type: string
- *                   firstName:
- *                     type: string
- *                   lastName:
- *                     type: string
- *                   email:
- *                     type: string
- *                     format: email
- *                   password:
- *                     type: string
- *     TeamInput:
- *       type: object
- *       properties:
- *         teamName:
- *           type: string
- *         location:
- *           type: string
- *         coach:
- *           type: object
- *           properties:
- *             id:
- *               type: integer
- *         players:
- *           type: array
- *           items:
- *             type: object
- *             properties:
- *               id:
- *                 type: integer
- *               user:
- *                 type: object
- *                 properties:
- *                   username:
- *                     type: string
- *                   firstName:
- *                     type: string
- *                   lastName:
- *                     type: string
- *                   email:
- *                     type: string
- *                     format: email
- *                   password:
- *                     type: string
- */
+
 export default teamRouter;

@@ -1,3 +1,38 @@
+/**
+ * @swagger
+ *   components:
+ *    securitySchemes:
+ *     bearerAuth:
+ *      type: http
+ *      scheme: bearer
+ *      bearerFormat: JWT
+ *    schemas:
+ *      User:
+ *          type: object
+ *          properties:
+ *            id:
+ *              type: number
+ *              format: int64
+ *            username:
+ *              type: string
+ *            firstName:
+ *              type: string
+ *            lastName:
+ *              type: string
+ *            email:
+ *              type: string
+ *      Parent:
+ *          type: object
+ *          properties:
+ *            id:
+ *              type: number
+ *              format: int64
+ *            user:
+ *              $ref: '#/components/schemas/User'
+ *            sex:
+ *              type: string
+ */
+
 import express, { NextFunction, Request, Response } from 'express';
 import parentService from '../service/parent.service';
 
@@ -7,6 +42,8 @@ const parentRouter = express.Router();
  * @swagger
  * /parents:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Retrieve a list of parents
  *     responses:
  *       200:
@@ -31,6 +68,8 @@ parentRouter.get('/', async (req: Request, res: Response, next: NextFunction) =>
  * @swagger
  * /parents/{id}:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Retrieve a parent by ID
  *     parameters:
  *       - in: path
@@ -63,30 +102,5 @@ parentRouter.get('/:id', async (req: Request, res: Response, next: NextFunction)
     }
 });
 
-/**
- * @swagger
- * components:
- *   schemas:
- *     Parent:
- *       type: object
- *       properties:
- *         id:
- *           type: integer
- *         user:
- *           type: object
- *           properties:
- *             username:
- *               type: string
- *             firstName:
- *               type: string
- *             lastName:
- *               type: string
- *             email:
- *               type: string
- *               format: email
- *             password:
- *               type: string
- *         sex:
- *           type: string
- */
+
 export default parentRouter;

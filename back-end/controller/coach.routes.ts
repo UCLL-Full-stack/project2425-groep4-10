@@ -1,3 +1,40 @@
+/**
+ * @swagger
+ *   components:
+ *    securitySchemes:
+ *     bearerAuth:
+ *      type: http
+ *      scheme: bearer
+ *      bearerFormat: JWT
+ *    schemas:
+ *      User:
+ *          type: object
+ *          properties:
+ *            id:
+ *              type: number
+ *              format: int64
+ *            username:
+ *              type: string
+ *            firstName:
+ *              type: string
+ *            lastName:
+ *              type: string
+ *            email:
+ *              type: string
+ *      Coach:
+ *          type: object
+ *          properties:
+ *            id:
+ *              type: number
+ *              format: int64
+ *            user:
+ *              $ref: '#/components/schemas/User'
+ *            rating:
+ *              type: number
+ *            experience:
+ *              type: number
+ */
+
 import express, { NextFunction, Request, Response } from 'express';
 import coachService from '../service/coach.service';
 
@@ -7,6 +44,8 @@ const coachRouter = express.Router();
  * @swagger
  * /coaches:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Retrieve a list of coaches
  *     responses:
  *       200:
@@ -31,6 +70,8 @@ coachRouter.get('/', async (req: Request, res: Response, next: NextFunction) => 
  * @swagger
  * /coaches/{id}:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Retrieve a coach by ID
  *     parameters:
  *       - in: path
@@ -63,33 +104,4 @@ coachRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) 
     }
 });
 
-/**
- * @swagger
- * components:
- *   schemas:
- *     Coach:
- *       type: object
- *       properties:
- *         id:
- *           type: integer
- *         user:
- *           type: object
- *           properties:
- *             username:
- *               type: string
- *             firstName:
- *               type: string
- *             lastName:
- *               type: string
- *             email:
- *               type: string
- *               format: email
- *             password:
- *               type: string
- *         rating:
- *           type: number
- *           format: float
- *         experience:
- *           type: integer
- */
 export default coachRouter;

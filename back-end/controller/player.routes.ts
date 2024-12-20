@@ -1,3 +1,40 @@
+/**
+ * @swagger
+ *   components:
+ *    securitySchemes:
+ *     bearerAuth:
+ *      type: http
+ *      scheme: bearer
+ *      bearerFormat: JWT
+ *    schemas:
+ *      User:
+ *          type: object
+ *          properties:
+ *            id:
+ *              type: number
+ *              format: int64
+ *            username:
+ *              type: string
+ *            firstName:
+ *              type: string
+ *            lastName:
+ *              type: string
+ *            email:
+ *              type: string
+ *      Player:
+ *          type: object
+ *          properties:
+ *            id:
+ *              type: number
+ *              format: int64
+ *            user:
+ *              $ref: '#/components/schemas/User'
+ *            age:
+ *              type: number
+ *            position:
+ *              type: string
+ */
+
 import express, { NextFunction, Request, Response } from 'express';
 import playerService from '../service/player.service';
 
@@ -7,6 +44,8 @@ const playerRouter = express.Router();
  * @swagger
  * /players:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Retrieve a list of players
  *     responses:
  *       200:
@@ -31,6 +70,8 @@ playerRouter.get('/', async (req: Request, res: Response, next: NextFunction) =>
  * @swagger
  * /players/{id}:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Retrieve a player by ID
  *     parameters:
  *       - in: path
@@ -63,32 +104,4 @@ playerRouter.get('/:id', async (req: Request, res: Response, next: NextFunction)
     }
 });
 
-/**
- * @swagger
- * components:
- *   schemas:
- *     Player:
- *       type: object
- *       properties:
- *         id:
- *           type: integer
- *         user:
- *           type: object
- *           properties:
- *             username:
- *               type: string
- *             firstName:
- *               type: string
- *             lastName:
- *               type: string
- *             email:
- *               type: string
- *               format: email
- *             password:
- *               type: string
- *         position:
- *           type: string
- *         age:
- *           type: integer
- */
 export default playerRouter;

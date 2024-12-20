@@ -1,11 +1,14 @@
+type Role = 'admin' | 'player' | 'coach'
+
 type UserInput = {
     id?: number;
-    username: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-}
+    username?: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    password?: string;
+    role?: Role;
+};
 
 type CoachInput = {
     id?: number;
@@ -42,4 +45,13 @@ type MatchInput = {
     location: string;
 }
 
-export type { UserInput, CoachInput, PlayerInput, ParentInput, TeamInput, MatchInput };
+
+type AuthenticationResponse = {
+    token: string
+    username: string
+    fullname: string
+    role: string
+}
+
+
+export type { UserInput, CoachInput, PlayerInput, ParentInput, TeamInput, MatchInput, AuthenticationResponse, Role };

@@ -32,17 +32,23 @@ const getUserById = async ({ id }: { id: number }): Promise<User | null> => {
     }
 }
 
-const createUser = async ({ user }: { user: User }): Promise<User> => {
+const createUser = async ({
+    username,
+    password,
+    firstName,
+    lastName,
+    email,
+    role,
+}: User): Promise<User> => {
     try {
         const userPrisma = await database.user.create({
-            data: user,
-        })
-        return User.from(userPrisma)
+            data: { username, password, firstName, lastName, email, role },
+        });
+        return User.from(userPrisma);
     } catch (error) {
-        throw new Error('Database error. See server log for details.')
+        throw new Error('Database error. See server log for details.');
     }
-}
-
+};
 
 export default {
     getAllUsers,
